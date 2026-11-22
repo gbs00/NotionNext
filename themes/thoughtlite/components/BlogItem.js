@@ -4,7 +4,6 @@ import TwikooCommentCount from '@/components/TwikooCommentCount'
 import { siteConfig } from '@/lib/config'
 import SmartLink from '@/components/SmartLink'
 import CONFIG from '../config'
-import { getWeeklyHeadline } from './weeklyIssue'
 
 /**
  * 博客列表的单个卡片
@@ -28,7 +27,7 @@ const BlogItem = ({ post, variant = 'default' }) => {
                 <NotionIcon icon={post.pageIcon} />
               </span>
             )}
-            {getWeeklyHeadline(post?.title)}
+            {post?.title}
           </SmartLink>
           {post?.type !== 'Page' && post?.category && (
             <SmartLink

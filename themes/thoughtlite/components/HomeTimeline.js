@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import BlogItem from './BlogItem'
-import { formatPublishDay, getPublishDay } from './weeklyIssue'
 
 /**
  * 按「发布日」分组的时间线列表（对齐 ThoughtLite 首页观感）。
@@ -12,13 +11,21 @@ export default function HomeTimeline({ posts }) {
     const sorted = [...posts].sort(
       (a, b) => (b.publishDate || 0) - (a.publishDate || 0)
     )
-    const postsByDay = new Map()
-    for (const post of sorted) {
-      const day = getPublishDay(post)
-      if (!postsByDay.has(day)) postsByDay.set(day, [])
-      postsByDay.get(day).push(post)
+    const dayOrder = []
+    const seen = new Set()
+    for (const p of sorted) {
+      const day = p.publishDay || p.date?.start_date || ''
+      if (!seen.has(day)) {
+        seen.add(day)
+        dayOrder.push(day)
+      }
     }
-    return [...postsByDay].map(([day, dayPosts]) => ({ day, posts: dayPosts }))
+    return dayOrder.map(day => ({
+      day,
+      posts: sorted.filter(
+        p => (p.publishDay || p.date?.start_date || '') === day
+      )
+    }))
   }, [posts])
 
   if (!groups.length) return null
@@ -27,7 +34,7 @@ export default function HomeTimeline({ posts }) {
     <div id='posts-wrapper' className='tl-timeline'>
       {groups.map(({ day, posts: dayPosts }) => (
         <section key={day || 'unknown'} className='tl-timeline-day'>
-          <h2 className='tl-timeline-day-label'>{formatPublishDay(day) || '—'}</h2>
+          <h2 className='tl-timeline-day-label'>{day || '—'}</h2>
           <ul className='tl-timeline-rail'>
             {dayPosts.map(post => (
               <li key={post.id} className='tl-timeline-item'>
