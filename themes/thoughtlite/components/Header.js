@@ -1,6 +1,7 @@
 import SmartLink from '@/components/SmartLink'
 import { siteConfig } from '@/lib/config'
 import { useGlobal } from '@/lib/global'
+import Image from 'next/image'
 import CONFIG from '../config'
 import { MenuList } from './MenuList'
 
@@ -19,7 +20,16 @@ export const Header = props => {
       <div className='mx-auto flex max-w-3xl items-center gap-2 px-4 py-3 md:gap-4 overflow-visible'>
         <SmartLink
           href='/'
-          className='tl-brand flex-shrink-0 text-lg font-semibold text-[var(--tl-text)] no-underline hover:opacity-80'>
+          className='tl-brand inline-flex shrink-0 items-center gap-2 text-lg font-semibold text-[var(--tl-text)] no-underline hover:opacity-80'>
+          <Image
+            src={siteConfig('BLOG_FAVICON')}
+            alt=''
+            width={24}
+            height={24}
+            className='shrink-0'
+            loading='eager'
+            unoptimized
+          />
           {siteConfig('TITLE')}
         </SmartLink>
 
